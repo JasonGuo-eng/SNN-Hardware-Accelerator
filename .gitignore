@@ -1,0 +1,22 @@
+# Quartus compilation folders
+db/
+incremental_db/
+output_files/
+simulation/
+greybox_tmp/
+
+# Quartus temporary and junk files
+*.qws
+*.rpt
+*.smsg
+*.summary
+*.done
+*.jdi
+*.pin
+*.bak
+
+# ModelSim temporary files
+work/
+transcript
+*.wlf
+*.vcd
