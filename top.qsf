@@ -18,7 +18,7 @@
 #
 # Quartus Prime
 # Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
-# Date created = 11:59:57  July 09, 2026
+# Date created = 15:18:12  July 17, 2026
 #
 # -------------------------------------------------------------------------- #
 #
@@ -40,8 +40,9 @@ set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
 set_global_assignment -name TOP_LEVEL_ENTITY top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "11:59:57  JULY 09, 2026"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:18:12  JULY 17, 2026"
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
+set_global_assignment -name SDC_FILE timing.sdc
 set_global_assignment -name VERILOG_FILE rtl/weight_bram.v
 set_global_assignment -name VERILOG_FILE rtl/top.v
 set_global_assignment -name VERILOG_FILE rtl/pe.v
@@ -52,8 +53,14 @@ set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
+set_instance_assignment -name VIRTUAL_PIN ON -to input_spikes[*]
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_instance_assignment -name VIRTUAL_PIN ON -to *
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name POWER_USE_INPUT_FILES ON
+set_global_assignment -name POWER_DEFAULT_INPUT_IO_TOGGLE_RATE "12.5 %"
+set_global_assignment -name POWER_INPUT_FILE_NAME tb_top.vcd -section_id tb_top.vcd
+set_instance_assignment -name POWER_READ_INPUT_FILE tb_top.vcd -to top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
