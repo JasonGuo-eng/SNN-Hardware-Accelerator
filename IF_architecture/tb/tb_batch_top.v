@@ -11,7 +11,7 @@ module tb_batch_top;
     parameter L1_THRESHOLD  = 291;
     parameter L2_THRESHOLD = 192;
 
-    // ── batch test config ───────────────────────────────────────
+    // batch test config 
     // Start small (50-200) to keep sim runtime manageable, then
     // scale up once you trust the flow.
     parameter NUM_IMAGES     = 1000;
@@ -26,7 +26,7 @@ module tb_batch_top;
     wire [$clog2(L2_OUT)-1:0] predicted_class;
     wire                      done;
 
-    // ── instantiate top ─────────────────────────────────────────
+    // instantiate top 
     top #(
         .L1_IN      (L1_IN),
         .L1_OUT     (L1_OUT),
@@ -47,11 +47,11 @@ module tb_batch_top;
         .done           (done)
     );
 
-    // ── clock ────────────────────────────────────────────────────
+    // clock 
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // ── flattened spike memory: addr = img_idx*TSTEPS + timestep ──
+    //  flattened spike memory: addr = img_idx*TSTEPS + timestep 
     // Each line in SPIKE_MEM_FILE is a 784-bit binary string (0/1),
     // one line per (image, timestep) pair, in that nested order.
     reg [L1_IN-1:0] spike_mem [0:NUM_IMAGES*TSTEPS-1];
@@ -76,7 +76,7 @@ module tb_batch_top;
             input_spikes = 0;
     end
 
-    // ── accuracy tracking ───────────────────────────────────────
+    //  accuracy tracking 
     integer correct_count;
     integer confusion [0:9][0:9];  // [actual][predicted]
     integer a, b;
