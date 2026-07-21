@@ -2,7 +2,7 @@
 
 module tb_controller;
 
-    // ── Parameters (Matching your network) ────────────────────────────
+    // Parameters 
     parameter integer L1_IN  = 784;
     parameter integer L1_OUT = 128;
     parameter integer L2_IN  = 128;
@@ -10,7 +10,7 @@ module tb_controller;
     parameter integer PES    = 8;
     parameter integer TSTEPS = 10;
 
-    // ── DUT Signals ───────────────────────────────────────────────────
+    // DUT Signals
     reg clk;
     reg reset_n;
     reg start;
@@ -25,7 +25,7 @@ module tb_controller;
     wire [3:0]                    active_pes;
     wire done;
 
-    // ── Instantiate the Controller ────────────────────────────────────
+    //  Instantiate the Controller 
     controller #(
         .L1_IN(L1_IN),
         .L1_OUT(L1_OUT),
@@ -48,11 +48,11 @@ module tb_controller;
         .done(done)
     );
 
-    // ── Clock Generation ──────────────────────────────────────────────
+    // Clock Generation
     initial clk = 0;
     always #5 clk = ~clk; // 10ns clock period (100 MHz)
 
-    // ── Simulation Stimulus ───────────────────────────────────────────
+    // Simulation Stimulus 
     initial begin
         // 1. Initialize Inputs
         reset_n = 0;
@@ -82,7 +82,7 @@ module tb_controller;
         $finish;
     end
 
-    // ── Progress Monitor ──────────────────────────────────────────────
+    // Progress Monitor 
     // This will print to the console whenever the timestep or layer changes
     // so you don't have to guess what the simulation is doing.
     reg prev_layer;
@@ -104,7 +104,7 @@ module tb_controller;
         end
     end
 
-    // ── Timeout Safeguard ─────────────────────────────────────────────
+    // Timeout Safeguard 
     // A full network run is ~128,000 cycles. We set a timeout at 200,000.
     initial begin
         #2000000; 
