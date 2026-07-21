@@ -20,7 +20,7 @@
     wire [3:0]   predicted_class;
     wire         done;
 
-    // ── instantiate top ───────────────────────────────────────────────
+    // instantiate top 
     top #(
         .L1_IN      (L1_IN),
         .L1_OUT     (L1_OUT),
@@ -40,11 +40,11 @@
         .done           (done)
     );
 
-    // ── clock ─────────────────────────────────────────────────────────
+    // clock
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // ── spike trains for all 10 timesteps ─────────────────────────────
+    // spike trains for all 10 timesteps
     // paste your reversed spike vectors from Python here
     reg [783:0] spike_train [0:19];
 
@@ -73,7 +73,7 @@
         
     end
 
-    // ── Feed correct spike train using the controller's internal timestep ────
+    // Feed correct spike train using the controller's internal timestep 
     always @(*) begin
         if (dut.ctrl.timestep < TSTEPS)
             input_spikes = spike_train[dut.ctrl.timestep];
@@ -81,7 +81,7 @@
             input_spikes = 0;
     end
 
-    // ── main test ─────────────────────────────────────────────────────
+    //  main test 
     initial begin
         reset_n      = 0;
         start        = 0;
@@ -93,7 +93,7 @@
         repeat(2) @(posedge clk);
         #1;
 
-        // ── TEST 1: full inference on one MNIST image ─────────────────
+        // TEST 1: full inference on one MNIST image
         $display("=== TEST 1: full inference ===");
         $display("true label = 7 (replace with your actual label)");
 
@@ -118,7 +118,7 @@
         else
             $display("WRONG prediction — check membrane accumulation");
 
-        // ── TEST 2: reset and run again — should get same result ──────
+        // TEST 2: reset and run again — should get same result
         $display("=== TEST 2: reset and rerun same image ===");
         @(negedge clk);
         reset_n = 0;
@@ -143,7 +143,7 @@
         $finish;
     end
 
-    // ── timeout ───────────────────────────────────────────────────────
+    // timeout
     initial begin
         #5000000;
         $display("TIMEOUT — check FSM is not stuck");
@@ -178,7 +178,7 @@ reg [783:0]  input_spikes;
 wire [3:0]   predicted_class;
 wire         done;
 
-// ── instantiate top ───────────────────────────────────────────────
+//  instantiate top 
 top #(
     .L1_IN      (L1_IN),
     .L1_OUT     (L1_OUT),
@@ -198,11 +198,11 @@ top #(
     .done           (done)
 );
 
-// ── clock ─────────────────────────────────────────────────────────
+// clock
 initial clk = 0;
 always #5 clk = ~clk;
 
-// ── spike trains for all 20 timesteps ─────────────────────────────
+// spike trains for all 20 timesteps 
 reg [783:0] spike_train [0:19];
 
 initial begin
@@ -230,7 +230,7 @@ initial begin
             
 end
 
-// ── feed correct spike train using the controller's internal timestep ────
+// feed correct spike train using the controller's internal timestep 
 always @(*) begin
     if (dut.ctrl.timestep < TSTEPS)
         input_spikes = spike_train[dut.ctrl.timestep];
@@ -238,7 +238,7 @@ always @(*) begin
         input_spikes = 0;
 end
 
-// ── main test ─────────────────────────────────────────────────────
+// main test
 initial begin
     reset_n      = 0;
     start        = 0;
@@ -251,7 +251,7 @@ initial begin
     repeat(2) @(posedge clk);
     #1;
 
-    // ── TEST 1: full inference ────────────────────────────────────
+    // TEST 1: full inference 
     $display("=== TEST 1: full inference ===");
     
     @(negedge clk);
@@ -265,7 +265,7 @@ initial begin
 
     $display("predicted class = %0d", predicted_class);
 
-    // ── TEST 2: reset and rerun ───────────────────────────────────
+    // TEST 2: reset and rerun
     $display("=== TEST 2: reset and rerun same image ===");
     @(negedge clk);
     reset_n = 0;
@@ -301,7 +301,7 @@ initial begin
     $finish;
 end
 
-// --- LAYER 1 DIAGNOSTIC MONITOR ---
+    //  LAYER 1 DIAGNOSTIC MONITOR
 always @(posedge clk) begin
     // When Layer 1 neurons are enabled, print the current from the first two PEs
     if (dut.neuron_en && ~dut.layer_sel) begin
@@ -310,7 +310,7 @@ always @(posedge clk) begin
     end
 end
 
-// ── timeout ───────────────────────────────────────────────────────
+// timeout
 initial begin
     #10000000; // Increased timeout for 20 timesteps
     $display("TIMEOUT — check FSM is not stuck");
