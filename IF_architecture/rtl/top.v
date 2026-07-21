@@ -24,7 +24,7 @@ output reg                         done
 
 );
 
-// ─── controller signals ───────────────────────────────────────────
+//  controller signals 
 wire                            pe_en;
 wire                            pe_clear;
 wire                            neuron_en;
@@ -201,8 +201,8 @@ parameter integer PES          = 8,
 parameter integer TSTEPS       = 20,
 parameter integer DATA_WIDTH   = 8,
 parameter integer ACC_WIDTH    = 16,
-parameter integer L1_THRESHOLD = 283,  // <-- Split and restored L1 Threshold
-parameter integer L2_THRESHOLD = 169   // <-- Split and restored L2 Threshold
+parameter integer L1_THRESHOLD = 283,  //  Split and restored L1 Threshold
+parameter integer L2_THRESHOLD = 169   //  Split and restored L2 Threshold
 )(
 input  wire                        clk,
 input  wire                        reset_n,
@@ -218,7 +218,7 @@ output reg                         done
 
 );
 
-// ─── controller signals ───────────────────────────────────────────
+// controller signals 
 wire                            pe_en;
 wire                            pe_clear;
 wire                            neuron_en;
@@ -229,26 +229,26 @@ wire [$clog2(TSTEPS)-1:0]       timestep;
 wire [3:0]                      active_pes;
 wire                            ctrl_done;
 
-// ─── spike register ───────────────────────────────────────────────
+// spike register 
 reg [L1_OUT-1:0] spike_register;
 
-// ─── layer 1 & 2 outputs ──────────────────────────────────────────
+// layer 1 & 2 outputs 
 wire [PES-1:0]   l1_spikes_out;
 wire [PES-1:0]   l1_valid;
 wire [PES-1:0]   l2_spikes_out;
 wire [PES-1:0]   l2_valid;
 
-// ─── output membrane accumulator ──────────────────────────────────
+// output membrane accumulator
 reg signed [ACC_WIDTH-1:0] output_membrane [0:L2_OUT-1];
 
-// ─── col_addr and base_addr routing ───────────────────────────────
+// col_addr and base_addr routing 
 wire [$clog2(L1_IN)-1:0] l1_col_addr = col_addr;
 wire [$clog2(L2_IN)-1:0] l2_col_addr = col_addr[$clog2(L2_IN)-1:0];
 
 wire [$clog2(L1_IN * L1_OUT/PES)-1:0] l1_base_addr = group * L1_IN;
 wire [$clog2(L2_IN * ((L2_OUT+PES-1)/PES))-1:0] l2_base_addr = group * L2_IN;
 
-// ─── instantiate controller ───────────────────────────────────────
+// instantiate controller 
 controller #(
     .L1_IN  (L1_IN),
     .L1_OUT (L1_OUT),
@@ -271,14 +271,14 @@ controller #(
     .done      (ctrl_done)
 );
 
-// ─── instantiate layer 1 ──────────────────────────────────────────
+// instantiate layer 1 
 layer #(
     .IN         (L1_IN),
     .OUT        (L1_OUT),
     .PES        (PES),
     .DATA_WIDTH (DATA_WIDTH),
     .ACC_WIDTH  (ACC_WIDTH),
-    .THRESHOLD  (L1_THRESHOLD),      // <-- Passed L1_THRESHOLD specifically
+    .THRESHOLD  (L1_THRESHOLD),      // Passed L1_THRESHOLD specifically
     .MEM_FILE0  ("mem/fc1_weights_bank0.mem"),
     .MEM_FILE1  ("mem/fc1_weights_bank1.mem"),
     .MEM_FILE2  ("mem/fc1_weights_bank2.mem"),
@@ -301,14 +301,14 @@ layer #(
     .valid      (l1_valid)
 );
 
-// ─── instantiate layer 2 ──────────────────────────────────────────
+// instantiate layer 2 
 layer #(
     .IN         (L2_IN),
     .OUT        (L2_OUT),
     .PES        (PES),
     .DATA_WIDTH (DATA_WIDTH),
     .ACC_WIDTH  (ACC_WIDTH),
-    .THRESHOLD  (L2_THRESHOLD),      // <-- Passed L2_THRESHOLD specifically
+    .THRESHOLD  (L2_THRESHOLD),      // Passed L2_THRESHOLD specifically
     .MEM_FILE0  ("mem/fc2_weights_bank0.mem"),
     .MEM_FILE1  ("mem/fc2_weights_bank1.mem"),
     .MEM_FILE2  ("mem/fc2_weights_bank2.mem"),
@@ -331,7 +331,7 @@ layer #(
     .valid      (l2_valid)
 );
 
-// ─── spike register update ────────────────────────────────────────
+// spike register update 
 always @(posedge clk or negedge reset_n) begin
     if (!reset_n) begin
         spike_register <= 0;
@@ -340,7 +340,7 @@ always @(posedge clk or negedge reset_n) begin
     end
 end
 
-// ─── output membrane accumulator ──────────────────────────────────
+// output membrane accumulator 
 integer i;
 always @(posedge clk or negedge reset_n) begin
     if (!reset_n) begin
@@ -358,7 +358,7 @@ always @(posedge clk or negedge reset_n) begin
     end
 end
 
-// ─── argmax ───────────────────────────────────────────────────────
+// argmax
 integer j;
 reg signed [ACC_WIDTH-1:0] max_val;
 reg [$clog2(L2_OUT)-1:0]   max_idx;
