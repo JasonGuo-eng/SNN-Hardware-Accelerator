@@ -2,7 +2,7 @@
 
 module tb_layer;
 
-    // ── parameters ────────────────────────────────────────────────────
+    // parameters 
     parameter integer IN         = 784;
     parameter integer OUT        = 128;
     parameter integer PES        = 8;
@@ -10,7 +10,7 @@ module tb_layer;
     parameter integer ACC_WIDTH  = 16;
     parameter integer THRESHOLD  = 32;
 
-    // ── DUT signals ───────────────────────────────────────────────────
+    // DUT signals 
     reg         clk;
     reg         reset_n;
     reg         en;
@@ -25,7 +25,7 @@ module tb_layer;
     wire [PES-1:0] spikes_out;
     wire [PES-1:0] valid;
 
-    // ── instantiate layer ─────────────────────────────────────────────
+    // instantiate layer
     layer #(
         .IN         (IN),
         .OUT        (OUT),
@@ -55,14 +55,14 @@ module tb_layer;
         .valid     (valid)
     );
 
-    // ── clock ─────────────────────────────────────────────────────────
+    // clock
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // ── loop variable ─────────────────────────────────────────────────
+    // loop variable 
     integer i;
 
-    // ── task: run one full dot product (784 cycles) ───────────────────
+    // task: run one full dot product (784 cycles)
     // simulates exactly what the controller does for one group
     task run_dot_product;
         input [13:0]    b_addr;     // base address for this group
@@ -110,7 +110,7 @@ module tb_layer;
         end
     endtask
 
-    // ── main test ─────────────────────────────────────────────────────
+    // main test
     initial begin
         reset_n    = 0;
         en         = 0;
@@ -125,12 +125,12 @@ module tb_layer;
         #1;
         reset_n = 1;
 
-        // ── TEST 1: all spikes=0, cur should be 0, no spikes out ──────
+        // TEST 1: all spikes=0, cur should be 0, no spikes out 
         $display("=== TEST 1: all spikes=0, expect cur=0, no output spikes ===");
         run_dot_product(0, {IN{1'b0}}, PES);
         $display("spikes_out = %08b (expect 00000000)", spikes_out);
 
-        // ── TEST 2: all spikes=1, cur = sum of all weights in row ─────
+        // TEST 2: all spikes=1, cur = sum of all weights in row 
         // this is the maximum possible accumulation
         $display("=== TEST 2: all spikes=1, maximum accumulation ===");
         run_dot_product(0, {IN{1'b1}}, PES);
@@ -138,21 +138,21 @@ module tb_layer;
         $display("(check if neurons fired — depends on weight sum vs threshold=%0d)",
                   THRESHOLD);
 
-        // ── TEST 3: run group 0 with real spike pattern ───────────────
+        // TEST 3: run group 0 with real spike pattern
         // paste your spike_input vector from Python here
         // for now using a simple alternating pattern as placeholder
         $display("=== TEST 3: alternating spike pattern group 0 ===");
         run_dot_product(0,784'b0000000000000000000000000000000000000000000111000000000000000000000000111100000000000000000000000111110000000000000000000000001110000000000000000000000001110000000000000000000000001111000000000000000000000000111000000000000000000000000111000000000000000000000000011000000000000000000000000011100000000000000000000000011100000000000000000000000001110000000000000000000000001111000000000000000000000000111000000000000000000000000011000000000000000000000000011100000000000000000000000011101110110000000000000000001111111111111010000000000000111111111111111100000000000000000000001111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, PES);
         $display("(check waveform: cur_out of pe_inst[0] should equal -684)");
 
-        // ── TEST 4: run group 1 (neurons 8-15) ───────────────────────
+        // TEST 4: run group 1 (neurons 8-15)
         // base_addr advances by IN=784 for each group
         $display("=== TEST 4: group 1, neurons 8-15, base_addr=784 ===");
         run_dot_product(784, {IN{1'b0}}, PES);
         $display("spikes_out group 1 = %08b (expect 00000000 since spikes=0)",
                   spikes_out);
 
-        // ── TEST 5: membrane persists across groups ───────────────────
+        // TEST 5: membrane persists across groups 
         // run group 0 twice — membrane should accumulate across both runs
         $display("=== TEST 5: membrane accumulates across two rounds ===");
         run_dot_product(0, {IN{1'b1}}, PES);
@@ -161,7 +161,7 @@ module tb_layer;
         $display("after round 2: spikes_out = %08b", spikes_out);
         $display("(more neurons should fire in round 2 as membrane builds up)");
 
-        // ── TEST 6: reset clears all membrane state ───────────────────
+        // TEST 6: reset clears all membrane state 
         $display("=== TEST 6: reset_n clears membrane ===");
         @(negedge clk);
         reset_n = 0;
