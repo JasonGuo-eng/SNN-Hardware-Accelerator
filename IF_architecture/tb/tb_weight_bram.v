@@ -51,7 +51,7 @@ module tb_weight_bram;
         repeat(3) @(posedge clk);
         #1;
 
-        // ── TEST 1: BRAM read latency is exactly 1 cycle ──────────────
+        // TEST 1: BRAM read latency is exactly 1 cycle 
         $display("=== TEST 1: BRAM read latency is exactly 1 cycle ===");
         @(negedge clk);
         en        = 1;
@@ -66,23 +66,23 @@ module tb_weight_bram;
         $display("cycle N+1 (data valid):            weight_out=%0d (real value)",
                   weight_out);
 
-        // ── TEST 2: read first weight of row 0 ───────────────────────
+        //  TEST 2: read first weight of row 0 
         $display("=== TEST 2: read weight at base=0 col=0 ===");
         read_weight(0, 0);
         $display("weight[0][0] = %0d", weight_out);
 
-        // ── TEST 3: read second weight of row 0 ──────────────────────
+        // TEST 3: read second weight of row 0 
         $display("=== TEST 3: read weight at base=0 col=1 ===");
         read_weight(0, 1);
         $display("weight[0][1] = %0d", weight_out);
 
-        // ── TEST 4: read first weight of row 1 ───────────────────────
+        // TEST 4: read first weight of row 1
         // base_addr=784 advances to next row in this bank
         $display("=== TEST 4: read weight at base=784 col=0 ===");
         read_weight(784, 0);
         $display("weight[1][0] = %0d", weight_out);
 
-        // ── TEST 5: en=0 holds output stable ─────────────────────────
+        // TEST 5: en=0 holds output stable
         $display("=== TEST 5: en=0 holds weight_out ===");
         @(negedge clk);
         en = 0;
@@ -93,7 +93,7 @@ module tb_weight_bram;
         #1;
         $display("after en=0 cycle 2: weight_out=%0d (expect unchanged)", weight_out);
 
-        // ── TEST 6: read first 5 weights and verify against .mem file ─
+        // TEST 6: read first 5 weights and verify against .mem file
         $display("=== TEST 6: address traversal — verify against mem file ===");
         $display("reading first 5 weights of row 0 from bank 0:");
         read_weight(0, 0); $display("  col=0: %0d", weight_out);
