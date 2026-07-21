@@ -82,7 +82,7 @@ module tb_pe;
         #1;
         reset_n = 1;
 
-        // ── TEST 1: spike=1 adds weight ──────────────────────────────
+        // TEST 1: spike=1 adds weight 
         $display("=== TEST 1: spike=1 adds weight ===");
         apply_input(5, 1);   // weight=5, spike=1 → accumulator += 5
         apply_input(5, 1);   // accumulator += 5
@@ -91,13 +91,13 @@ module tb_pe;
         $display("after 3x(w=5,spk=1): cur_out=%0d valid=%0b (expect cur=15, valid=1)",
                   cur_out, valid);
 
-        // ── TEST 2: clear resets accumulator ─────────────────────────
+        // TEST 2: clear resets accumulator
         $display("=== TEST 2: clear resets accumulator ===");
         clear_pe;
         #2;
         $display("after clear: cur_out=%0d (expect 0)", cur_out);
 
-        // ── TEST 3: spike=0 does not add weight ──────────────────────
+        // TEST 3: spike=0 does not add weight 
         $display("=== TEST 3: spike=0 does not add weight ===");
         apply_input(10, 0);  // weight=10 but spike=0 → accumulator stays 0
         apply_input(10, 0);
@@ -105,7 +105,7 @@ module tb_pe;
         $display("after 2x(w=10,spk=0): cur_out=%0d valid=%0b (expect cur=0, valid=1)",
                   cur_out, valid);
 
-        // ── TEST 4: mixed spikes ──────────────────────────────────────
+        // TEST 4: mixed spikes 
         $display("=== TEST 4: mixed spikes ===");
         clear_pe;
         apply_input(7, 1);   // += 7
@@ -117,7 +117,7 @@ module tb_pe;
         $display("after mixed spikes: cur_out=%0d valid=%0b (expect cur=21, valid=1)",
                   cur_out, valid);
 
-        // ── TEST 5: negative weight ───────────────────────────────────
+        // TEST 5: negative weight 
         $display("=== TEST 5: negative weight ===");
         clear_pe;
         apply_input(10,  1);  // += 10
@@ -127,7 +127,7 @@ module tb_pe;
         $display("after w=10,-3,5 all spike=1: cur_out=%0d valid=%0b (expect cur=12, valid=1)",
                   cur_out, valid);
 
-        // ── TEST 6: valid pulses exactly one cycle ────────────────────
+        // TEST 6: valid pulses exactly one cycle
         $display("=== TEST 6: valid pulses one cycle only ===");
         clear_pe;
         apply_input(4, 1);
@@ -137,7 +137,7 @@ module tb_pe;
         #1;
         $display("cycle 2 after en drops: valid=%0b (expect 0)", valid);
 
-        // ── TEST 7: reset_n clears everything ────────────────────────
+        // TEST 7: reset_n clears everything 
         $display("=== TEST 7: reset_n clears everything ===");
         apply_input(20, 1);
         @(negedge clk);
