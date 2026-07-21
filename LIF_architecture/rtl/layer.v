@@ -190,7 +190,7 @@ module layer #(
     wire signed [DATA_WIDTH-1:0] weights [0:PES-1];
     wire signed [ACC_WIDTH-1:0]  cur     [0:PES-1]; // Connects PE output to Neuron input
 
-    // ── pipeline delay registers (matches 1-cycle BRAM latency) ────
+    //  pipeline delay registers (matches 1-cycle BRAM latency) 
     reg spike_in_reg;
     reg pe_en;
 
@@ -206,7 +206,7 @@ module layer #(
         end
     end
 
-    // ── explicit BRAM instantiations ────────────────────────────────
+    // explicit BRAM instantiations 
     weight_bram #(.ROWS((OUT+PES-1)/PES), .COLS(IN), .DATA_WIDTH(DATA_WIDTH), .MEM_FILE(MEM_FILE0))
         bram0 (.clk(clk), .en(en), .base_addr(base_addr), .col_addr(col_addr), .weight_out(weights[0]));
 
@@ -231,7 +231,7 @@ module layer #(
     weight_bram #(.ROWS((OUT+PES-1)/PES), .COLS(IN), .DATA_WIDTH(DATA_WIDTH), .MEM_FILE(MEM_FILE7))
         bram7 (.clk(clk), .en(en), .base_addr(base_addr), .col_addr(col_addr), .weight_out(weights[7]));
 
-    // ── PE and Neuron Arrays ────────────────────────────────────────
+    // PE and Neuron Arrays
     genvar i;
     generate
         // 1. Processing Elements (Multiply & Accumulate current)
