@@ -2,12 +2,11 @@
 
 module tb_if_neuron;
 
-    // ── parameters matching your if_neuron ───────────────────────────
     //  parameter DATA_WIDTH = 8;
     parameter ACC_WIDTH  = 16;
     parameter THRESHOLD  = 32;
 
-    // ── DUT (device under test) signals ──────────────────────────────
+    //  DUT signals
     reg                        clk;
     reg                        reset_n;
     reg                        en;
@@ -16,7 +15,7 @@ module tb_if_neuron;
     wire                         spike_out;
     wire signed [ACC_WIDTH-1:0] membrane_potential;
 
-    // ── instantiate the module under test ─────────────────────────────
+    // instantiate the module under test
     if_neuron #(
         //.DATA_WIDTH(DATA_WIDTH),
         .ACC_WIDTH (ACC_WIDTH),
@@ -30,11 +29,11 @@ module tb_if_neuron;
         .membrane_potential (membrane_potential)
     );
 
-    // ── clock generation — 10ns period (100MHz) ───────────────────────
+    // clock generation — 10ns period (100MHz)
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // ── helper task: apply one cur_in for one cycle ───────────────────
+    //  helper task: apply one cur_in for one cycle 
     task apply_current;
         input signed [ACC_WIDTH-1:0] current;
         begin
@@ -46,7 +45,7 @@ module tb_if_neuron;
         end
     endtask
 
-    // ── helper task: idle for N cycles ───────────────────────────────
+    // helper task: idle for N cycles
     task idle_cycles;
         input integer n;
         integer k;
@@ -58,7 +57,7 @@ module tb_if_neuron;
         end
     endtask
 
-    // ── main test sequence ────────────────────────────────────────────
+    // main test sequence 
     initial begin
         // initialise
         reset_n = 0;
@@ -123,14 +122,14 @@ module tb_if_neuron;
         $finish;
     end
 
-    // ── timeout watchdog — kills sim if it hangs ──────────────────────
+    // timeout watchdog — kills sim if it hangs 
     initial begin
         #10000;
         $display("TIMEOUT — simulation took too long");
         $finish;
     end
 
-    // ── optional: dump waveforms for ModelSim viewer ──────────────────
+    // optional: dump waveforms for ModelSim viewer
     initial begin
         $dumpfile("tb_if_neuron.vcd");
         $dumpvars(0, tb_if_neuron);
